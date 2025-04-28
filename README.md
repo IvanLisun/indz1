@@ -15,5 +15,5 @@
 ### Локальне середовище
 1. Клонувати репозиторій:
    ```bash
-   git clone https://github.com/yourusername/my-project.git
+   git clone https://github.com/IvanLisun/indz1.git
    cd my-project
