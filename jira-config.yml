@@ -1,0 +1,9 @@
+jira:
+  url: "https://vanlisun.atlassian.net/jira/software/projects/SCRUM/boards/1/backlog"
+  project_key: "MYPROJECT"
+  username: "vanlisun@ukr.net"
+  api_token: "ATATT3xFfGF0o88FOVooLbMa4AnNtfbViB9wLNQuJCladlcvdD6knI9gkUVzuC9vxLxdrCELE0AsJUKnKl5HBo8dayiJM_PyB6rWC4QDRp2aMu2-Nhz73qPDXDaL97Ft1rXe113EA1wTh3042oXMNW4bb0-Sb-zS2Sbmfs-bpYIyRtsNQ_e105E=C91CA015"
+  issue_creation:
+    enabled: true
+    default_summary: "Automated issue created by CI/CD"
+    default_description: "This issue was created automatically as part of the CI/CD process."
