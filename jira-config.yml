@@ -1,0 +1,9 @@
+jira:
+  url: "https://your-jira-instance.atlassian.net"
+  project_key: "MYPROJECT"
+  username: "your-email@example.com"
+  api_token: "your-api-token"
+  issue_creation:
+    enabled: true
+    default_summary: "Automated issue created by CI/CD"
+    default_description: "This issue was created automatically as part of the CI/CD process."
