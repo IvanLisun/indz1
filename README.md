@@ -16,4 +16,4 @@
 1. Клонувати репозиторій:
    ```bash
    git clone https://github.com/IvanLisun/indz1.git
-   cd my-project
+   cd indz1
