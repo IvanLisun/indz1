@@ -1,14 +1,12 @@
 name: CI Pipeline
 
 on:
-  push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
-  schedule:
-    - cron: '0 3 * * *' # Запуск щодня о 3:00 ночі
+  workflow_dispatch:
+    inputs:
+      reason:
+        description: 'Причина запуску'
+        required: false
+        default: 'Manual run'
 
 jobs:
   build-test:
@@ -43,12 +41,12 @@ jobs:
         pytest tests/integration
 
     - name: Build Docker image
-      if: success()  # тільки якщо всі тести пройшли
+      if: success()
       run: |
         docker build -t ghcr.io/${{ github.repository }}:latest .
 
     - name: Log in to GitHub Container Registry
-      if: success()  # тільки якщо успішно зібрано
+      if: success()
       uses: docker/login-action@v3
       with:
         registry: ghcr.io
@@ -56,12 +54,12 @@ jobs:
         password: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Push Docker image
-      if: success()  # тільки якщо успішний білд
+      if: success()
       run: |
         docker push ghcr.io/${{ github.repository }}:latest
 
     - name: Notify Slack
-      if: always()  # сповіщення відправляється завжди, незалежно від успіху/помилки
+      if: always()
       uses: slackapi/slack-github-action@v1.25.0
       with:
         payload: |
