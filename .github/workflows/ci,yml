@@ -32,7 +32,7 @@ jobs:
       run: |
         pip install flake8
         flake8 src/ tests/
-
+    
     - name: Run unit tests
       run: |
         pip install pytest
@@ -43,10 +43,12 @@ jobs:
         pytest tests/integration
 
     - name: Build Docker image
+      if: success()  # тільки якщо всі тести пройшли
       run: |
         docker build -t ghcr.io/${{ github.repository }}:latest .
 
     - name: Log in to GitHub Container Registry
+      if: success()  # тільки якщо успішно зібрано
       uses: docker/login-action@v3
       with:
         registry: ghcr.io
@@ -54,15 +56,17 @@ jobs:
         password: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Push Docker image
+      if: success()  # тільки якщо успішний білд
       run: |
         docker push ghcr.io/${{ github.repository }}:latest
 
     - name: Notify Slack
+      if: always()  # сповіщення відправляється завжди, незалежно від успіху/помилки
       uses: slackapi/slack-github-action@v1.25.0
       with:
         payload: |
           {
-            "text": "✅ CI успішно завершено для ${{ github.repository }} на гілці ${{ github.ref }}!"
+            "text": "${{ job.status == 'success' && '✅' || '❌' }} CI завершено для ${{ github.repository }} на гілці ${{ github.ref }} зі статусом: ${{ job.status }}."
           }
       env:
         SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
