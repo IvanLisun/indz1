@@ -5,8 +5,8 @@ on:
     workflows: ["CI Pipeline"]
     types:
       - completed
-    branches: 
-      - main  # Тільки для гілки main
+    branches:
+      - main # Тільки для гілки main
 
 jobs:
   deploy:
@@ -14,28 +14,28 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-    - name: Set up Kubernetes tools
-      run: |
-        curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
-        chmod +x ./kubectl
-        sudo mv ./kubectl /usr/local/bin/kubectl
+      - name: Set up Kubernetes tools
+        run: |
+          curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+          chmod +x ./kubectl
+          sudo mv ./kubectl /usr/local/bin/kubectl
 
-    - name: Configure kubectl
-      run: |
-        echo "${{ secrets.KUBE_CONFIG_DATA }}" | base64 --decode > kubeconfig
-        export KUBECONFIG=kubeconfig
+      - name: Configure kubectl
+        run: |
+          echo "${{ secrets.AWS_ACCESS_KEY_ID }}" | base64 --decode > kubeconfig
+          export KUBECONFIG=kubeconfig
 
-    - name: Deploy to Kubernetes
-      run: |
-        kubectl set image deployment/my-deployment my-container=ghcr.io/${{ github.repository }}:latest
-        kubectl rollout status deployment/my-deployment
+      - name: Deploy to Kubernetes
+        run: |
+          kubectl set image deployment/my-deployment my-container=ghcr.io/${{ github.repository }}:latest
+          kubectl rollout status deployment/my-deployment
 
-    - name: Monitor deployment
-      run: |
-        echo "Checking pod status..."
-        kubectl get pods -o wide
-        echo "Testing if pods are running..."
-        kubectl get pods --field-selector=status.phase=Running
+      - name: Monitor deployment
+        run: |
+          echo "Checking pod status..."
+          kubectl get pods -o wide
+          echo "Testing if pods are running..."
+          kubectl get pods --field-selector=status.phase=Running
