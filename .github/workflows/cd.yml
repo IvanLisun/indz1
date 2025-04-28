@@ -5,10 +5,12 @@ on:
     workflows: ["CI Pipeline"]
     types:
       - completed
+    branches: 
+      - main  # Тільки для гілки main
 
 jobs:
   deploy:
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    if: ${{ github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.head_branch == 'main' }}
     runs-on: ubuntu-latest
 
     steps:
@@ -33,4 +35,7 @@ jobs:
 
     - name: Monitor deployment
       run: |
-        kubectl get pods
+        echo "Checking pod status..."
+        kubectl get pods -o wide
+        echo "Testing if pods are running..."
+        kubectl get pods --field-selector=status.phase=Running
