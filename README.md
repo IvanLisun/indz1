@@ -17,3 +17,7 @@
    ```bash
    git clone https://github.com/IvanLisun/indz1.git
    cd indz1
+echo "# Trigger CI" >> README.md
+git add README.md
+git commit -m "Trigger CI workflow"
+git push origin main
