@@ -1,0 +1,13 @@
+netlify:
+  project: indz1
+  build:
+    command: "pip install -r requirements.txt"
+    functions: "netlify/functions"
+    publish: "public"
+    start: "python main.py"
+    port: 5000
+
+  redirects:
+    - from: "/*"
+      to: "/.netlify/functions/indz1"
+      status: 200
