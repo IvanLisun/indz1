@@ -1,0 +1,10 @@
+build:
+  docker:
+    web: Dockerfile
+
+run:
+  web: gunicorn -b :$PORT main:app
+
+env:
+  GOOGLE_CLOUD_PROJECT: "indz1-heroku-app"
+  ENV: "production"
