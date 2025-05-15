@@ -1,0 +1,40 @@
+# azure-pipelines.yml або custom microsoft_azure.yml
+# CI/CD конфіг для деплою у Azure Web App (з Docker)
+trigger:
+  branches:
+    include:
+      - main
+
+variables:
+  azureContainerRegistry: 'yourregistry.azurecr.io'
+  dockerImageName: 'manage-product-app'
+  azureSubscription: 'Your Azure Subscription Name'
+  appName: 'manage-product-frontend' # Назва App Service
+  resourceGroup: 'manage-product-group'
+  dockerfilePath: 'Dockerfile'
+
+jobs:
+- job: BuildAndDeploy
+  displayName: 'Build and Deploy to Azure Web App'
+  pool:
+    vmImage: 'ubuntu-latest'
+
+  steps:
+  - task: Docker@2
+    displayName: 'Build and Push Docker Image'
+    inputs:
+      command: buildAndPush
+      containerRegistry: '$(azureContainerRegistry)'
+      repository: '$(dockerImageName)'
+      dockerfile: $(dockerfilePath)
+      tags: |
+        latest
+
+  - task: AzureWebAppContainer@1
+    displayName: 'Deploy to Azure Web App'
+    inputs:
+      azureSubscription: $(azureSubscription)
+      appName: $(appName)
+      resourceGroupName: $(resourceGroup)
+      containers: |
+        $(azureContainerRegistry)/$(dockerImageName):latest
